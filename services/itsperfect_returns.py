@@ -2,7 +2,9 @@ import pandas as pd
 from utils.auth import get_itsperfect_token
 from utils.pagination import fetch_paginated
 from utils.helpers import safe_get
+import streamlit as st
 
+BASE_URL = st.secrets["ITSP_BASE_URL"]
 def fetch_returns(date_from, date_to):
     headers = {"Authorization": f"Bearer {get_itsperfect_token()}"}
 
@@ -47,3 +49,4 @@ def fetch_returns(date_from, date_to):
         "Amount", "Postage costs"
 
     ]]
+
