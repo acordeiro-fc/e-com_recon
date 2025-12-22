@@ -75,6 +75,9 @@ def export_to_excel(sheets: dict):
 
             # Write to Excel
             df.to_excel(writer, sheet_name=sheet, index=False)
+            del df
+            import gc
+            gc.collect()    
             ws = writer.book[sheet]
 
             # -------------------
@@ -391,4 +394,5 @@ def add_itsp_returns_columns(ws):
     header_font = Font(bold=True)
 
     for col in range(1, ws.max_column + 1):
+
         ws.cell(row=1, column=col).font = header_font
