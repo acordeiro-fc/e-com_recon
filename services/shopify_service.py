@@ -2,12 +2,10 @@ import time
 import requests
 import pandas as pd
 
-from config.shopify import (
-    ACCESS_TOKEN,
-    ACCESS_TOKEN_ARCHIVE,
-    GRAPHQL_URL,
-    GRAPHQL_URL_ARCHIVE,
-)
+ACCESS_TOKEN = st.secrets["SHOPIFY_ACCESS_TOKEN"]
+ACCESS_TOKEN_ARCHIVE = st.secrets["SHOPIFY_ACCESS_TOKEN_ARCHIVE"]
+GRAPHQL_URL = st.secrets["SHOPIFY_GRAPHQL_URL"]
+GRAPHQL_URL_ARCHIVE = st.secrets["SHOPIFY_GRAPHQL_URL_ARCHIVE"]
 
 SHOPIFY_RENAME_MAPS = {
     "payments": {
@@ -257,5 +255,6 @@ def fetch_shopify_reports(start_date, end_date):
         fetch_shopify_tax(start_date, end_date, ACCESS_TOKEN, GRAPHQL_URL),
         fetch_shopify_tax(start_date, end_date, ACCESS_TOKEN_ARCHIVE, GRAPHQL_URL_ARCHIVE)
     ], ignore_index=True)
+
 
     return results
