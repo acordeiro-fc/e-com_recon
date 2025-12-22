@@ -1,5 +1,4 @@
 import pandas as pd
-from config.itsperfect import BASE_URL
 from utils.auth import get_itsperfect_token
 from utils.pagination import fetch_paginated
 from utils.helpers import safe_get
@@ -46,4 +45,5 @@ def fetch_returns(date_from, date_to):
         "Return costs", "Discount", "Comments",
         "Country", "Subsidiary", "Quantity",
         "Amount", "Postage costs"
+
     ]]
