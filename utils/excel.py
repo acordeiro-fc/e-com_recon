@@ -41,14 +41,6 @@ DATE_COLS = {
     "ITSP Returns": ["Date"],
 }
 
-def convert_excel_dates(series):
-    # If it looks numeric → Excel serial date
-    if pd.api.types.is_numeric_dtype(series):
-        return pd.to_datetime(series, unit="D", origin="1899-12-30", errors="coerce")
-
-    # Otherwise, normal date parsing
-    return pd.to_datetime(series, errors="coerce")
-
 def export_to_excel(sheets: dict):
     output = BytesIO()
 
@@ -395,4 +387,5 @@ def add_itsp_returns_columns(ws):
     for col in range(1, ws.max_column + 1):
 
         ws.cell(row=1, column=col).font = header_font
+
 
