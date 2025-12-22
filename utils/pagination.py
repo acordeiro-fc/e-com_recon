@@ -1,7 +1,6 @@
 import time
 import requests
 from utils.auth import get_itsperfect_token
-from tqdm import tqdm
 
 def fetch_paginated(url, headers, limit=250):
     all_data = []
@@ -30,3 +29,4 @@ def fetch_paginated(url, headers, limit=250):
 
 
     return all_data
+
