@@ -84,13 +84,13 @@ def export_to_excel(sheets: dict):
             # -------------------
             # Apply formatting
             # -------------------
-            for col_idx, col_name in enumerate(df.columns, start=1):
-                if col_name in NUMERIC_COLS.get(sheet, []):
-                    for row in range(2, ws.max_row + 1):
-                        ws.cell(row=row, column=col_idx).number_format = NUMBER_FORMAT
-                if col_name in DATE_COLS.get(sheet, []):
-                    for row in range(2, ws.max_row + 1):
-                        ws.cell(row=row, column=col_idx).number_format = "dd/mm/yyyy"
+            # for col_idx, col_name in enumerate(df.columns, start=1):
+            #     if col_name in NUMERIC_COLS.get(sheet, []):
+            #         for row in range(2, ws.max_row + 1):
+            #             ws.cell(row=row, column=col_idx).number_format = NUMBER_FORMAT
+            #     if col_name in DATE_COLS.get(sheet, []):
+            #         for row in range(2, ws.max_row + 1):
+            #             ws.cell(row=row, column=col_idx).number_format = "dd/mm/yyyy"
             del df
             import gc
             gc.collect()
@@ -174,7 +174,7 @@ def add_reconciliation_sheet(wb):
     # Write orders starting at row 5
     for row_idx, order in enumerate(all_orders, start=5):
         ws.cell(row=row_idx, column=1, value=order)
-        ws.cell(row_idx, column=1).fill = LIGHT_GREEN
+        # ws.cell(row_idx, column=1).fill = LIGHT_GREEN
 
     last_row = 5 + len(all_orders) - 1
     fill_reconciliation_formulas(ws, last_row)
@@ -238,14 +238,14 @@ def fill_reconciliation_formulas(ws, last_row):
             if col[0] in ["B"]:
                 ws[cell_str].number_format = "dd/mm/yyyy"
 
-            if col[0] in ["K", "L", "M"]:
-                ws[cell_str].fill = LIGHT_BLUE
+            # if col[0] in ["K", "L", "M"]:
+            #     ws[cell_str].fill = LIGHT_BLUE
             
-            if col[0] in ["N", "O", "P"]:
-                ws[cell_str].fill = LIGHT_ORANGE
+            # if col[0] in ["N", "O", "P"]:
+            #     ws[cell_str].fill = LIGHT_ORANGE
             
-            if col[0] in ["Q"]:
-                ws[cell_str].fill = ORANGE
+            # if col[0] in ["Q"]:
+            #     ws[cell_str].fill = ORANGE
 
 def add_shopify_returns_columns(ws):
     last_col = ws.max_column
@@ -270,10 +270,10 @@ def add_shopify_returns_columns(ws):
             f'VLOOKUP(I{r},Backend!E:F,2,0))'
         )
     
-    header_font = Font(bold=True)
+    # header_font = Font(bold=True)
 
-    for col in range(1, ws.max_column + 1):
-        ws.cell(row=1, column=col).font = header_font
+    # for col in range(1, ws.max_column + 1):
+    #     ws.cell(row=1, column=col).font = header_font
 
 def add_shopify_payments_columns(ws):
     last_col = ws.max_column
@@ -291,10 +291,10 @@ def add_shopify_payments_columns(ws):
         ws.cell(r, year_col).value = f"=YEAR(B{r})"
         ws.cell(r, month_col).value = f"=MONTH(B{r})"
     
-    header_font = Font(bold=True)
+    # header_font = Font(bold=True)
 
-    for col in range(1, ws.max_column + 1):
-        ws.cell(row=1, column=col).font = header_font
+    # for col in range(1, ws.max_column + 1):
+    #     ws.cell(row=1, column=col).font = header_font
 
 def add_itsp_sales_columns(ws):
     last_col = ws.max_column
@@ -312,10 +312,10 @@ def add_itsp_sales_columns(ws):
     ws.cell(1, date_col).fill = LIGHT_BLUE
 
     for r in range(2, last_row + 1):
-        # Colors
-        ws.cell(r, total_col).fill = LIGHT_BLUE
-        ws.cell(r, vat_col).fill = LIGHT_BLUE
-        ws.cell(r, date_col).fill = LIGHT_BLUE
+        # # Colors
+        # ws.cell(r, total_col).fill = LIGHT_BLUE
+        # ws.cell(r, vat_col).fill = LIGHT_BLUE
+        # ws.cell(r, date_col).fill = LIGHT_BLUE
         # Formulas
         ws.cell(r, total_col).value = f"=H{r}+P{r}+Q{r}"
         ws.cell(r, vat_col).value = f"=Q{r}/(H{r}+P{r})"
@@ -325,10 +325,10 @@ def add_itsp_sales_columns(ws):
         ws.cell(r, vat_col).number_format = NUMBER_FORMAT
         ws.cell(r, date_col).number_format = "dd/mm/yyyy"
     
-    header_font = Font(bold=True)
+    # header_font = Font(bold=True)
 
-    for col in range(1, ws.max_column + 1):
-        ws.cell(row=1, column=col).font = header_font
+    # for col in range(1, ws.max_column + 1):
+    #     ws.cell(row=1, column=col).font = header_font
 
 
 # --------------------------------------------------
@@ -360,12 +360,12 @@ def add_itsp_returns_columns(ws):
 
     for r in range(2, last_row + 1):
         # Colors
-        ws.cell(r, date_col).fill = LIGHT_BLUE
-        ws.cell(r, ship_cost_col).fill = LIGHT_BLUE
-        ws.cell(r, ship_cost_return_col).fill = LIGHT_BLUE
-        ws.cell(r, vat_col).fill = LIGHT_BLUE
-        ws.cell(r, total_col).fill = LIGHT_BLUE
-        ws.cell(r, check_col).fill = LIGHT_ORANGE
+        # ws.cell(r, date_col).fill = LIGHT_BLUE
+        # ws.cell(r, ship_cost_col).fill = LIGHT_BLUE
+        # ws.cell(r, ship_cost_return_col).fill = LIGHT_BLUE
+        # ws.cell(r, vat_col).fill = LIGHT_BLUE
+        # ws.cell(r, total_col).fill = LIGHT_BLUE
+        # ws.cell(r, check_col).fill = LIGHT_ORANGE
 
         # Formulas
         ws.cell(r, date_col).value = f"=B{r}"
@@ -377,15 +377,16 @@ def add_itsp_returns_columns(ws):
 
         # Format
         ws.cell(r, date_col).number_format = "dd/mm/yyyy"
-        ws.cell(r, ship_cost_col).number_format = NUMBER_FORMAT
-        ws.cell(r, ship_cost_return_col).number_format = NUMBER_FORMAT
-        ws.cell(r, vat_col).number_format = NUMBER_FORMAT
-        ws.cell(r, total_col).number_format = NUMBER_FORMAT
+        # ws.cell(r, ship_cost_col).number_format = NUMBER_FORMAT
+        # ws.cell(r, ship_cost_return_col).number_format = NUMBER_FORMAT
+        # ws.cell(r, vat_col).number_format = NUMBER_FORMAT
+        # ws.cell(r, total_col).number_format = NUMBER_FORMAT
     
-    header_font = Font(bold=True)
+    # header_font = Font(bold=True)
 
-    for col in range(1, ws.max_column + 1):
+    # for col in range(1, ws.max_column + 1):
 
-        ws.cell(row=1, column=col).font = header_font
+    #     ws.cell(row=1, column=col).font = header_font
+
 
 
