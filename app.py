@@ -83,11 +83,11 @@ else:
             KEY_COL = "Order no."
             existing_orders = set(old_itsp_df[KEY_COL].dropna().astype(str))
             sales_df_copy[KEY_COL] = sales_df_copy[KEY_COL].astype(str)
-    
+
             new_sales_rows = sales_df_copy[
                 ~sales_df_copy[KEY_COL].isin(existing_orders)
             ]
-    
+            del sales_df_copy
             new_sales_rows["Marketplace > Channel"] = None
             new_sales_rows = new_sales_rows[old_itsp_df.columns]
     
@@ -129,5 +129,6 @@ else:
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     
         )
+
 
 
