@@ -47,17 +47,15 @@ def export_to_excel(sheets: dict):
     with pd.ExcelWriter(output, engine="openpyxl") as writer:
         for sheet, df in sheets.items():
             if df.empty:
-                df = pd.DataFrame(["No data"], columns=["Info"])
+                continue
 
             # -------------------
             # Clean numeric columns
             # -------------------
             for col in NUMERIC_COLS.get(sheet, []):
-                if col in df.columns:
-                    # Convert EU-style numbers to float
-                    df[col] = df[col].astype(str).str.replace(",", ".")
-                    df[col] = pd.to_numeric(df[col], errors="coerce").astype(float)
-
+                if col in df:
+                    df[col] = pd.to_numeric(df[col].astype(str).str.replace(",", "."), errors="coerce")
+            
             # -------------------
             # Clean date columns
             # -------------------
@@ -387,6 +385,7 @@ def add_itsp_returns_columns(ws):
     # for col in range(1, ws.max_column + 1):
 
     #     ws.cell(row=1, column=col).font = header_font
+
 
 
 
