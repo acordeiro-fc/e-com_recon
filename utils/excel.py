@@ -97,7 +97,8 @@ def export_to_excel(sheets: dict):
         # -------------------
         # Add reconciliation sheet
         # -------------------
-        add_reconciliation_sheet(writer.book)
+        # add_reconciliation_sheet(writer.book)
+        add_reconciliation_sheet_light(writer.book, sheets)
 
         # -------------------
         # Reorder and color tabs
@@ -123,6 +124,66 @@ def color_sheet_tabs(wb):
     for sheet_name, color in TAB_COLORS.items():
         if sheet_name in wb.sheetnames:
             wb[sheet_name].sheet_properties.tabColor = color
+
+def add_reconciliation_sheet_light(wb, sheets):
+    shopify_df = sheets.get("Shopify incl. returns", pd.DataFrame())
+    itsp_sales_df = sheets.get("ITSP Sales", pd.DataFrame())
+    itsp_returns_df = sheets.get("ITSP Returns", pd.DataFrame())
+    old_itsp_df = sheets.get("Old ITSP", pd.DataFrame())
+
+    ws = wb.create_sheet("Recon")
+    headers = [
+        "Order Ref", "Date", "Country", "VAT %",
+        "VAT % (Old)", "Diff", "In ITSP?",
+        "Cancelled", "Gift card", "Gift card 2",
+        "ITSP Sales", "ITSP Return", "Total ITSP",
+        "Shopify Sales", "Shopify Return",
+        "Total Shopify", "Delta", "Comment"
+    ]
+    for col, h in enumerate(headers, 1):
+        ws.cell(row=1, column=col, value=h).font = Font(bold=True)
+
+    # Collect all unique orders
+    shopify_orders = set(shopify_df["Order"].dropna().astype(str)) if not shopify_df.empty else set()
+    itsp_orders = set(itsp_sales_df["Reference"].dropna().astype(str)) if not itsp_sales_df.empty else set()
+    itsp_returns_orders = set(itsp_returns_df["Comments"].dropna().astype(str)) if not itsp_returns_df.empty else set()
+    all_orders = sorted(shopify_orders | itsp_orders | itsp_returns_orders)
+
+    # Precompute values in Python
+    data_rows = []
+    for order in all_orders:
+        date = (
+            shopify_df.loc[shopify_df["Order"] == order, "Date"].max()
+            if order in shopify_orders else
+            itsp_sales_df.loc[itsp_sales_df["Reference"] == order, "Date"].max()
+            if order in itsp_orders else None
+        )
+        vat = shopify_df.loc[shopify_df["Order"] == order, "VAT %"].mean() if order in shopify_orders else 0
+        old_vat = old_itsp_df.loc[old_itsp_df["Order no."] == order, "VAT %"].mean() if order in old_itsp_df["Order no."].values else vat
+        diff = vat - old_vat
+        in_itsp = "Yes" if order in old_itsp_df["Order no."].values else "No"
+        itsp_sales_total = itsp_sales_df.loc[itsp_sales_df["Reference"] == order, "Total"].sum() if order in itsp_orders else 0
+        itsp_return_total = itsp_returns_df.loc[itsp_returns_df["Comments"] == order, "Total"].sum() if order in itsp_returns_orders else 0
+        total_itsp = itsp_sales_total + itsp_return_total
+        shopify_sales_total = shopify_df.loc[shopify_df["Order"] == order, "Total Sales"].sum() if order in shopify_orders else 0
+        shopify_return_total = shopify_df.loc[shopify_df["Order"] == order, "Returns"].sum() if order in shopify_orders else 0
+        total_shopify = shopify_sales_total + shopify_return_total
+        delta = total_itsp - total_shopify
+
+        row = [
+            order, date, None, vat, old_vat, diff, in_itsp,
+            None, None, None,
+            itsp_sales_total, itsp_return_total, total_itsp,
+            shopify_sales_total, shopify_return_total, total_shopify,
+            delta, None
+        ]
+        data_rows.append(row)
+
+    # Write all rows at once
+    for r_idx, row in enumerate(data_rows, start=2):
+        for c_idx, value in enumerate(row, start=1):
+            ws.cell(row=r_idx, column=c_idx, value=value)
+
 
 def add_reconciliation_sheet(wb):
     ws = wb.create_sheet("Recon")
@@ -385,6 +446,7 @@ def add_itsp_returns_columns(ws):
     # for col in range(1, ws.max_column + 1):
 
     #     ws.cell(row=1, column=col).font = header_font
+
 
 
 
