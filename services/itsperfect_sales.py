@@ -2,7 +2,9 @@ import pandas as pd
 from utils.auth import get_itsperfect_token
 from utils.pagination import fetch_paginated
 from utils.helpers import safe_get
+import streamlit as st
 
+BASE_URL = st.secrets["ITSP_BASE_URL"]
 # -----------------------------------
 # Mappings
 # -----------------------------------
@@ -204,3 +206,4 @@ def fetch_sales_orders(date_from: str, date_to: str) -> pd.DataFrame:
 
 
     return df
+
