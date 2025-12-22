@@ -1,5 +1,4 @@
 import pandas as pd
-from config.itsperfect import BASE_URL
 from utils.auth import get_itsperfect_token
 from utils.pagination import fetch_paginated
 from utils.helpers import safe_get
@@ -202,5 +201,6 @@ def fetch_sales_orders(date_from: str, date_to: str) -> pd.DataFrame:
     ]
 
     df = df[columns]
+
 
     return df
