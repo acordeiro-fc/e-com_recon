@@ -227,11 +227,11 @@ def fill_reconciliation_formulas(ws, last_row):
     }
 
     # Fill formulas for all rows efficiently
+    translators = {col: Translator(f, origin=col) for col, f in formulas.items()}
+    
     for r in range(5, last_row + 1):
-        for col, f in formulas.items():
-            cell_str = f"{col[0]}{r}"
-            ws[cell_str].value = Translator(f, origin=col).translate_formula(dest=f"{col[0]}{r}")
-
+        for col, translator in translators.items():
+            ws[f"{col[0]}{r}"].value = translator.translate_formula(dest=f"{col[0]}{r}")
             # If this is a date column (e.g., B), apply date format
             if col[0] in ["B"]:
                 ws[cell_str].number_format = "dd/mm/yyyy"
@@ -385,6 +385,7 @@ def add_itsp_returns_columns(ws):
     # for col in range(1, ws.max_column + 1):
 
     #     ws.cell(row=1, column=col).font = header_font
+
 
 
 
