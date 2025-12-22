@@ -1,6 +1,7 @@
 import time
 import requests
 import pandas as pd
+import streamlit as st
 
 ACCESS_TOKEN = st.secrets["SHOPIFY_ACCESS_TOKEN"]
 ACCESS_TOKEN_ARCHIVE = st.secrets["SHOPIFY_ACCESS_TOKEN_ARCHIVE"]
@@ -258,3 +259,4 @@ def fetch_shopify_reports(start_date, end_date):
 
 
     return results
+
