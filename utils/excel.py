@@ -75,9 +75,6 @@ def export_to_excel(sheets: dict):
 
             # Write to Excel
             df.to_excel(writer, sheet_name=sheet, index=False)
-            del df
-            import gc
-            gc.collect()    
             ws = writer.book[sheet]
 
             # -------------------
@@ -102,7 +99,9 @@ def export_to_excel(sheets: dict):
                 if col_name in DATE_COLS.get(sheet, []):
                     for row in range(2, ws.max_row + 1):
                         ws.cell(row=row, column=col_idx).number_format = "dd/mm/yyyy"
-
+            del df
+            import gc
+            gc.collect()
             ws.auto_filter.ref = ws.dimensions
 
         # -------------------
@@ -396,3 +395,4 @@ def add_itsp_returns_columns(ws):
     for col in range(1, ws.max_column + 1):
 
         ws.cell(row=1, column=col).font = header_font
+
