@@ -33,7 +33,9 @@ if isinstance(date_range, tuple) and len(date_range) == 2:
 else:
     start_date, end_date = None, None
 
-if reference_excel is not None:
+if reference_excel is None:
+    st.info("Please upload the reference Excel to enable the Generate button.")
+else:
     if st.button("Generate Excel"):
         with st.spinner("In progress..."):
             status_text = st.empty()
@@ -127,6 +129,3 @@ if reference_excel is not None:
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     
         )
-    else:
-        st.button("Generate Excel", disabled=True)
-        st.info("Please upload the reference Excel to enable the Generate button.")
