@@ -1,4 +1,5 @@
 import requests
+import streamlit as st
 
 BASE_URL = st.secrets["ITSP_BASE_URL"]
 USERNAME = st.secrets["ITSP_USERNAME"]
@@ -12,3 +13,4 @@ def get_itsperfect_token():
     r.raise_for_status()
 
     return r.json()["token"]
+
