@@ -11,7 +11,7 @@ from utils.excel import export_to_excel
 
 def load_reference_sheet(path, sheet_name):
     return pd.read_excel(path, sheet_name=sheet_name, dtype=str)
-
+st.write("App started")
 st.title("E-commerce Reconciliation Export")
 
 today = datetime.today()
@@ -129,3 +129,4 @@ else:
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     
         )
+
