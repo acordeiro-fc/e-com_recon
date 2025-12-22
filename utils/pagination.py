@@ -11,7 +11,7 @@ def fetch_paginated(url, headers, limit=250):
     r.raise_for_status()
     total_pages = int(r.headers.get("X-Pagination-Page-Count", 1))
     
-    for page in tqdm(range(1, total_pages + 1), desc="Fetching pages"):
+    for page in range(1, total_pages + 1):
         while True:
             r = requests.get(f"{url}&limit={limit}&page={page}", headers=headers)
             print(f"Fetched {len(all_data)} orders so far...")
@@ -27,5 +27,6 @@ def fetch_paginated(url, headers, limit=250):
 
         data = r.json()
         all_data.extend(data)
+
 
     return all_data
