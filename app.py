@@ -105,8 +105,6 @@ else:
             }
             t7 = time.perf_counter()
             output = export_to_excel(sheets)
-            if "excel_file" not in st.session_state:
-                st.session_state.excel_file = output
             t8 = time.perf_counter()
     
             # st.info(
@@ -124,11 +122,12 @@ else:
             # )
         st.download_button(
             "Download Excel",
-            st.session_state.excel_file,
+            output,
             file_name="ecom_recon.xlsx",
             mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     
         )
+
 
 
 
